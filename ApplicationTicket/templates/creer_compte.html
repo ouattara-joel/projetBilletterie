@@ -1,0 +1,239 @@
+
+
+{% extends "base_accueil.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- ======================= EVENEMENTS ================== -->
+<div class="evenement">
+  <div class="event-form-container">
+      <h2>Créer votre compte</h2>
+              {% if errors %}
+              <ul class="errors">
+                  {% for field, error in errors.items %}
+                      {% if error %}
+                          <li>{{ error }}</li>
+                      {% endif %}
+                  {% endfor %}
+              </ul>
+          {% endif %}
+      
+
+      <form action="{% url 'creer_compte' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+          
+          <div class="form-group">
+              <label for="Nom">Nom :</label>
+              <input type="text" id="Nom" name="Nom" placeholder="Votre Nom" value="{{ request.POST.Nom }}" required>
+          </div>
+
+          <div class="form-group">
+              <label for="Prénom">Prénom :</label>
+              <input type="text" id="Prénom" name="Prénom" placeholder="Votre Prénom" value="{{ request.POST.Prénom }}" required>
+            
+          </div>
+
+          <div class="form-group">
+              <label for="email">E-mail :</label>
+              <input type="email" id="email" name="email" placeholder="exemple@exemple.com" value="{{ request.POST.email }}" required>
+              {% if errors.email %}
+                  <div class="error-message">{{ errors.email }}</div>
+              {% endif %}
+          </div>
+
+          <div class="form-group">
+              <label for="password">Mot de passe :</label>
+              <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+              
+          </div>
+
+          <div class="form-group">
+              <label for="image">Image :</label>
+              <input type="file" id="image" name="image" accept="image/*">
+             
+          </div>
+
+          <div class="form-group button-container">
+              <button type="submit" class="create-account-button">Créer un compte</button>
+              <a href="{% url 'connexion' %}" class="submit-button">Connexion</a>
+          </div>
+      </form>
+
+      <div class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </div>
+    
+  </div>
+</div>
+
+
+
+
+<style>
+    /* ////////////////////////EVENEMENT ////////////////////// */
+.event-form-container {
+  margin-top: 6em;
+  background: var(--white);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 600px;
+  margin-left: 30%;
+}
+
+.event-form-container h2 {
+  font-size: 2rem;
+  color: var(--blue);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--black2);
+  margin-bottom: 4px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--black2);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input[type="file"] {
+  padding: 3px; /* Réduit le padding pour le champ de fichier */
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 10px rgba(0, 0, 255, 0.2);
+}
+
+/* Container for the two buttons */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Ensure the container takes full width */
+}
+
+/* Style for the links acting as buttons */
+.submit-button, .create-account-button {
+  display: inline-block;
+  text-align: center;
+  width: 48%; /* Each button takes nearly half of the width */
+  padding: 15px;
+  font-size: 1.2rem;
+  color: var(--white);
+  text-decoration: none; /* Remove underline from links */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* Style for Connexion button */
+.submit-button {
+  background-color: var(--blue);
+}
+
+.submit-button:hover {
+  background-color: var(--black2);
+}
+
+/* Style for Create Account button */
+.create-account-button {
+  background-color: var(--black2); /* Define your desired green color */
+}
+
+.create-account-button:hover {
+  background-color: var(--blue); /* Hover effect for the create account button */
+}
+
+
+/* ////////////errors dans le formulaire de creation de comptes /////////////// */
+
+/* Styles pour les messages d'erreur */
+.errors {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: red;
+
+}
+
+.errors li {
+  color: red;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+/* Styles pour les messages de succès */
+.messages {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.messages li.success {
+  color: green;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+/* Styles pour les messages généraux */
+.error-message {
+  color: red;
+  font-size: 1em;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .event-form-container {
+    padding: 15px;
+  }
+
+  .form-group input {
+    font-size: 0.9rem;
+  }
+
+  .submit-button {
+    font-size: 1rem;
+  }
+}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sélectionne les messages de succès
+    var successMessages = document.querySelectorAll('.messages li.success');
+    
+    if (successMessages.length > 0) {
+        // Affiche le message de succès pendant 3 secondes
+        setTimeout(function() {
+            successMessages.forEach(function(message) {
+                message.style.display = 'none';
+            });
+        }, 3000);
+    }
+});
+
+</script>
+
+{% endblock %}

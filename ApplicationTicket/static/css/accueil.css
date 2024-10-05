@@ -1,0 +1,127 @@
+/* =========== Google Fonts ============ */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* =============== Globals ============== */
+* {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #2a2185;
+  --white: #fff;
+  --gray: #f5f5f5;
+  --black1: #222;
+  --black2: #999;
+  --hover-bg: #2a2185;
+  --hover-text: #fff;
+  --active-bg: #2a2185;
+  --active-text: #fff;
+  --search-bg: #fff;
+  --search-border: #ddd;
+  --search-border-focus: #2a2185;
+  --card-bg: #fff;
+  --card-border: #ddd;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --button-bg: #2a2185;
+  --button-text: #fff;
+  --button-hover-bg: #1a1a66;
+}
+
+/* Style pour la barre de navigation */
+/* Style pour la barre de navigation */
+
+/* ///////////footer////////////////////// */
+
+/* Footer */
+.footer {
+  background-color: var(--blue);
+  color: var(--white);
+  padding: 40px 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section {
+  flex: 1;
+  margin: 20px;
+}
+
+.footer-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: var(--hover-text);
+}
+
+/* Réseaux sociaux */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-links li {
+  list-style: none;
+}
+
+.social-links li a img {
+  width: 32px;
+  height: 32px;
+  transition: transform 0.3s ease;
+  border-radius: 15px;
+}
+
+.social-links li a img:hover {
+  transform: scale(1.2);
+}
+
+/* Copyright */
+.footer-bottom {
+  margin-top: 30px;
+  border-top: 1px solid var(--hover-text);
+  padding-top: 20px;
+}
+
+.footer-bottom p {
+  font-size: 1rem;
+  color: var(--white);
+}
+
+/* Responsive design pour petits écrans */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+  }
+
+  .footer-section {
+    margin: 10px 0;
+  }
+}

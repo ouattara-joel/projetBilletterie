@@ -1,0 +1,162 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Admin Dashboard | Korsat X Parmaga</title>
+    <!-- ======= Styles ====== -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/ionicons@5.5.2/dist/ionicons.css">
+    <link href="https://unpkg.com/ionicons@5.5.2/dist/ionicons.min.css" rel="stylesheet">
+    <!-- <script src="{% static '/static/js/html5-qrcode.min.js' %}"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script src="{% static 'js/main.js' %}"></script> -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <!-- <script src="{% static 'js/main.js' %}"></script> -->
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+
+
+    
+
+
+
+
+
+
+
+
+</head>
+
+
+<body>
+    <!-- =============== Navigation ================ -->
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="person-outline"></ion-icon>
+                        </span>
+                        <span class="title" style="font-size: 1.1em;"><span>{{ prenom }} 
+                             {{  nom }}</span></span>
+                    </a>
+                </li>
+                
+
+                <li>
+                    <a href="{% url 'index' %}" id="dashboard-link">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'evenement' %}">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                        <span class="title">Publier un évènement</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'message_utilisateur' %}">
+                        <span class="icon">
+                            <ion-icon name="chatbubble-outline"></ion-icon>
+                        </span>
+                        <span class="title">Messages</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'controle_ticket' %}">
+                        <span class="icon">
+                            <ion-icon name="help-outline"></ion-icon>
+                        </span>
+                        <span class="title">Controle de Tickets</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'settings' %}">
+                        <span class="icon">
+                            <ion-icon name="settings-outline"></ion-icon>
+                        </span>
+                        <span class="title">Settings</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'password' %}">
+                        <span class="icon">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                        </span>
+                        <span class="title">Password</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'accueil' %}" class="logout-link" style="color: red;">
+                        <span class="icon">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
+                    
+                </li>
+            </ul>
+        </div>
+
+        <!-- ========================= Main ==================== -->
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Search here">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+
+                <div class="user">
+                    {% if image %}
+                        <img src="{{ user.image.url }}" alt="Image de profil">
+                    {% else %}
+                        <p>Aucune image de profil disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            {% block content %}
+
+        
+            
+            {% endblock %}
+
+          
+        </div>
+    </div>
+
+    <!-- =========== Scripts =========  -->
+    <script src="static/js/main.js"></script>
+
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- Include Ionicons -->
+    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>

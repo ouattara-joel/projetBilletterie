@@ -1,0 +1,313 @@
+
+
+{% extends "base_accueil.html" %}
+{% load static %}
+
+{% block content %}
+<div class="event-form-container0"> 
+    <h2>Détails de l'événement</h2>
+    
+    <div class="event-details-grid">
+        <div class="event-image">
+            <img src="{{ evenement.image.url }}" alt="Logo de l'événement" />
+        </div>
+        <div class="event-info">
+            <h3>{{ evenement.titre }}</h3>
+            <p><strong>Date :</strong> {{ evenement.date }}</p>
+            <p><strong>Lieu :</strong>{{ evenement.lieu}}</p>
+            <p><strong>Description :</strong> il ne faut pas ratee</p>
+            <p><strong>Organisateur :</strong> {{ evenement.organisateur }}</p>
+            <p><strong>Places disponibles :</strong> {{ evenement.nombre_places }}</p>
+        </div>
+        <div class="event-side-text">
+            <p>N'hésitez surtout pas à prendre votre ticket, vous ne regretterez pas d'avoir participé.</p>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <a href="#" class="submit-button"  id="toggleFormBtn" >Prendre son ticket</a>
+    </div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+</div>
+
+
+<!-- ///////////////FORMULAIRE DU BENEFICIAIRE DU TICKET //////////////// -->
+<div class="evenement" id="ticketForm" style="display: none;">
+    <div class="event-form-container">
+        <h2>Renseigner les infos du bénéficiaire du ticket</h2>
+               
+       
+  
+        <form action="{% url 'ticket_evenement' evenement.id %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="Nom">Nom du bénéficiaire:</label>
+                <input type="text" id="Nom" name="Nom" placeholder="Nom du bénéficiaire" value="{{ request.POST.Nom }}" required>
+            </div>
+  
+            <div class="form-group">
+                <label for="Prénom">Prénom du bénéficiaire :</label>
+                <input type="text" id="Prénom" name="Prénom" placeholder="Prénom du bénéficiaire :" value="{{ request.POST.Prénom }}" required>
+              
+            </div>
+  
+            <div class="form-group">
+                <label for="email">E-mail valide :</label>
+                <input type="email" id="email" name="email" placeholder="exemple@exemple.com" value="{{ request.POST.email }}" required>
+                {% if errors.email %}
+                    <div class="error-message">{{ errors.email }}</div>
+                {% endif %}
+            </div>
+  
+            <div class="form-group">
+                <label for="number">Numéro WhatsApp (pour recevoir le ticket du bénéficiaire )</label>
+                <input type="number" id="number" name="number" placeholder="number" required>
+                
+            </div>
+  
+    
+  
+            <div class="form-group button-container">
+                <button type="submit" class="create-account-button">Valider</button>
+            </div>
+        </form>
+  
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+
+<style>
+    /* Conteneur général pour l'événement */
+    .event-form-container0 {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 800px;
+      margin-top: 6em;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: Arial, sans-serif;
+    }
+    
+    .event-form-container0 h2 {
+      font-size: 2rem;
+      color: var(--blue);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    /* Grid for event details with side text */
+    .event-details-grid {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .event-image img {
+      width: 100%;
+      height: 13em;
+      max-height: 13em;
+      max-width: 100%;
+      border-radius: 15px;
+    }
+    
+    .event-info h3 {
+      font-size: 1.8rem;
+      color: var(--black2);
+      margin-bottom: 10px;
+    }
+    
+    .event-info p {
+      font-size: 1rem;
+      color: var(--black2);
+      margin-bottom: 8px;
+    }
+    
+    /* Texte en face des détails */
+    .event-side-text {
+      background: var(--gray);
+      padding: 15px;
+      width: 10em;
+      max-width: 10em;
+      height: 8em;
+      max-height: 8em;
+      margin-left: auto;
+      border-radius: 10px;
+      text-align: center;
+      color: var(--black2);
+      font-size: 1.3rem;
+      font-style: italic;
+      box-shadow: 0 4px 15px rgba(0, 0, 255, 0.2);
+    }
+    
+    .event-side-text p {
+      margin: 0;
+    }
+    
+    /* Button Container */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .submit-button {
+      display: inline-block;
+      text-align: center;
+      width: 50%;
+      padding: 15px;
+      font-size: 1.2rem;
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: var(--blue);
+      transition: background 0.3s ease;
+    }
+    
+    .submit-button:hover {
+      background-color: var(--black2);
+    }
+    
+
+
+/* /////////////formulaire ////////////////////////////// */
+/* Conteneur principal pour le formulaire */
+.event-form-container {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 60%;
+    margin-top: 4em;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Arial, sans-serif;
+}
+
+.event-form-container h2 {
+    font-size: 2rem;
+    color: var(--blue);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--black2);
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--blue);
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--blue);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Style du bouton de soumission */
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.create-account-button {
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 80%;
+}
+
+.create-account-button:hover {
+    background-color: var(--black2);
+}
+
+
+
+    
+    /* Responsive styling */
+    @media (max-width: 768px) {
+      .event-details-grid {
+        flex-direction: column;
+        
+      }
+      .event-side-text{
+        margin: auto;
+      }
+    
+      .submit-button {
+        width: 80%;
+        font-size: 1rem;
+        margin-bottom: 10px;
+      }
+      .event-form-container {
+        width: 90%;
+    }
+    }
+</style>
+
+
+<!-- JavaScript pour afficher/masquer le formulaire et faire défiler la page -->
+<script>
+    document.getElementById('toggleFormBtn').addEventListener('click', function(event) {
+        event.preventDefault();  // Empêche le lien de rediriger
+
+        var form = document.getElementById('ticketForm');
+
+        // Afficher/masquer le formulaire
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+            
+            // Scroll vers le formulaire pour le rendre visible
+            form.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            form.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

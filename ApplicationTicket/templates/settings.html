@@ -1,0 +1,117 @@
+
+{% extends "Dashbord.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- ======================= setting ================== -->
+
+<div class="setting">
+    <h1>Paramétrer votre application ici</h1>
+    <div class="settings-options">
+        <div class="setting-item">
+            <h2>Modifier le thème</h2>
+            <p>Choisissez un thème pour personnaliser l'apparence de votre application.</p>
+            <button class="setting-btn">Personnaliser</button>
+        </div>
+
+        <div class="setting-item">
+            <h2>Notifications</h2>
+            <p>Gérez vos notifications et alertes importantes.</p>
+            <button class="setting-btn">Configurer</button>
+        </div>
+
+        <div class="setting-item">
+            <h2>Compte</h2>
+            <p>Modifiez vos informations de compte et paramètres de sécurité.</p>
+            <button class="setting-btn">Gérer</button>
+        </div>
+    </div>
+</div>
+<h1>Bienvenue {{nom}}</h1>
+
+<style>
+
+    /* Conteneur principal des paramètres */
+.setting {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.setting h1 {
+    font-size: 2rem;
+    color: var(--blue);
+    margin-bottom: 30px;
+}
+
+/* Conteneur des options de paramètres */
+.settings-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.setting-item {
+    background-color: var(--lightGray);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.setting-item h2 {
+    font-size: 1.4rem;
+    color: var(--black2);
+    margin-bottom: 10px;
+}
+
+.setting-item p {
+    font-size: 1rem;
+    color: var(--black3);
+    margin-bottom: 20px;
+}
+
+.setting-item:hover {
+    background-color: var(--blue);
+    transform: scale(1.05);
+}
+
+.setting-item:hover h2,
+.setting-item:hover p {
+    color: var(--white);
+}
+
+/* Style pour le bouton */
+.setting-btn {
+    background-color: var(--blue);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+.setting-btn:hover {
+    background-color: var(--darkBlue);
+}
+
+/* Responsive design pour petits écrans */
+@media (max-width: 768px) {
+    .settings-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+
+
+{% endblock %}

@@ -1,0 +1,305 @@
+{% extends "Dashbord.html" %}
+{% load static %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="cardBox" id="dashboard-content">
+    {% if evenement_list %}
+        {% for item in evenement_list %}
+        <!-- Ligne des cartes d'un événement -->
+        <div class="eventRow">
+            <!-- Cadre pour l'image de l'événement -->
+            <div class="card">
+                <div>
+                    {% if item.evenement.image %}
+                        <img src="{{ item.evenement.image.url }}" alt="Image de l'événement" style="width: 11.5em; max-width: 15em; max-height: 8em; height: 8em;">
+                    {% else %}
+                        <img src="{% static 'images/default_event.jpg' %}" alt="Image par défaut" style="width: 7em; max-width: 7em; max-height: 6em; height: 6em;">
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Cadre pour les places disponibles -->
+            <div class="card">
+                <div>
+                    <div class="numbers">{{ item.evenement.nombre_places }}</div>
+                    <div class="cardName">Places Disponibles</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="grid-outline"></ion-icon>
+                </div>
+            </div>
+
+            <!-- Cadre pour les places restantes -->
+            <div class="card">
+                <div>
+                    <div class="numbers">{{ item.evenement.nombre_places }}</div>
+                    <div class="cardName">Places Restantes</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="people-outline"></ion-icon>
+                </div>
+            </div>
+
+            <!-- Cadre pour le montant du ticket -->
+            <div class="card">
+                <div>
+                    <div class="numbers">{{ item.evenement.montant }} frs</div>
+                    <div class="cardName">Ticket d'entrée</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="cash-outline"></ion-icon>
+                </div>
+            </div>
+        </div>
+        <div class="tickets" id="tickets-section-{{ forloop.counter }}">
+            <h3>
+                <button class="toggle-table-btn" onclick="toggleTableVisibility('tickets-table-{{ forloop.counter }}'); scrollToSection('tickets-section-{{ forloop.counter }}')">
+                    Voir les tickets de l'événement
+                </button>
+                <span style="color: red; margin-left: 10px;">
+                    {{ item.tickets.count }} Participants
+                </span>
+            </h3>
+        
+            {% if item.evenement.nombre_places > 0 %}
+            <canvas id="ticketsChart-{{ item.evenement.id }}" width="400" height="80"></canvas>
+            {% else %}
+                <p>Aucune donnée pour générer le graphique.</p>
+            {% endif %}
+        
+            <div id="tickets-table-{{ forloop.counter }}" style="display: none;">
+                <button class="toggle-tickets-btn" onclick="toggleTicketVisibility('tickets-list-{{ forloop.counter }}', {{ item.tickets|length }})">
+                    Afficher les 5 premiers tickets
+                </button>
+        
+                <table id="tickets-list-{{ forloop.counter }}" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Numéro WhatsApp</th>
+                            <th>Scanné</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in item.tickets %}
+                            <tr class="ticket-row">
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ ticket.nom_beneficiaire }}</td>
+                                <td>{{ ticket.prenom_beneficiaire }}</td>
+                                <td>{{ ticket.email_beneficiaire }}</td>
+                                <td>{{ ticket.numero_whatsapp }}</td>
+                                <td>{% if ticket.scanne %}Oui{% else %}Non{% endif %}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6">Aucun ticket disponible pour cet événement.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                {% for item in evenement_list %}
+                const ctx_{{ item.evenement.id }} = document.getElementById('ticketsChart-{{ item.evenement.id }}').getContext('2d');
+                const ticketsChart_{{ item.evenement.id }} = new Chart(ctx_{{ item.evenement.id }}, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Tickets Vendus', 'Tickets Scannés', 'Tickets Non Scannés', 'Places Disponibles'],
+                        datasets: [{
+                            label: '{{ item.evenement.nom }}',
+                            data: [
+                                {{ item.tickets.count }},
+                                {{ item.tickets_scannes }},
+                                {{ item.tickets_non_scannes }},
+                                {{ item.evenement.nombre_places }} - {{ item.tickets.count }}
+                            ],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',  // Tickets Vendus
+                                'rgba(75, 192, 192, 0.2)',  // Tickets Scannés
+                                'rgba(255, 206, 86, 0.2)',   // Tickets Non Scannés
+                                'rgba(54, 162, 235, 0.2)'    // Places Disponibles
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+                {% endfor %}
+            });
+        </script>
+        
+        {% endfor %}
+    {% else %}
+    <div class="card">
+        <div>
+            <div class="numbers"></div>
+            <div class="cardName">Places Restantes</div>
+        </div>
+        <div class="iconBx">
+            <ion-icon name="people-outline"></ion-icon>
+        </div>
+    </div>    {% endif %}
+</div>
+
+<!-- JavaScript pour gérer l'affichage des tickets -->
+<script>
+    function toggleTicketVisibility(ticketListId, totalTickets) {
+        const ticketList = document.getElementById(ticketListId);
+        const button = ticketList.previousElementSibling; // Sélectionner le bouton juste avant le tableau
+        
+        const showAll = button.textContent.includes("Afficher tous les tickets");
+        const displayCount = showAll ? Math.min(totalTickets, 5) : totalTickets;
+
+        const ticketRows = ticketList.getElementsByClassName('ticket-row');
+
+        // Afficher ou masquer les tickets selon le choix
+        for (let i = 0; i < ticketRows.length; i++) {
+            ticketRows[i].style.display = (i < displayCount) ? '' : 'none';
+        }
+
+        // Mettre à jour le texte du bouton
+        button.textContent = showAll ? "Afficher les 5 premiers tickets" : "Afficher tous les tickets";
+    }
+
+    function toggleTableVisibility(tableId) {
+        const ticketsTable = document.getElementById(tableId);
+        if (ticketsTable.style.display === "none") {
+            ticketsTable.style.display = "block"; // Afficher le tableau
+        } else {
+            ticketsTable.style.display = "none"; // Masquer le tableau
+        }
+    }
+
+    function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+<!-- Style CSS pour la gestion des tickets et des boutons -->
+
+<style>
+    .cardBox {
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .eventRow {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap; /* Permet aux éléments de passer à la ligne */
+    }
+
+    .cardBox .card {
+        background: var(--white);
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+        transition: background 0.3s ease, color 0.3s ease;
+        flex-basis: 23%;
+    }
+
+
+    .tickets {
+        margin-top: 10px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        width: 100%;
+    }
+
+    table {
+        width: 100%; /* Le tableau prend toute la largeur disponible */
+        border-collapse: collapse; /* Pour supprimer les espaces entre les cellules */
+        table-layout: fixed; /* Les colonnes ont une largeur fixe */
+        margin: 15px 0; /* Marge autour du tableau */
+    }
+
+    th, td {
+        padding: 10px; /* Rembourrage pour les cellules */
+        text-align: left; /* Alignement à gauche */
+        border: 1px solid #ddd; /* Bordure autour des cellules */
+        overflow: hidden; /* Pour cacher le contenu débordant */
+        text-overflow: ellipsis; /* Pour ajouter des points de suspension si le texte déborde */
+        white-space: nowrap; /* Pour empêcher le retour à la ligne */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Couleur de fond pour les en-têtes */
+    }
+
+    .toggle-table-btn, .toggle-tickets-btn {
+        background-color: #007bff; /* Couleur du bouton */
+        color: white; /* Couleur du texte du bouton */
+        border: none; /* Supprimer la bordure */
+        padding: 10px; /* Rembourrage pour le bouton */
+        border-radius: 5px; /* Coins arrondis */
+        cursor: pointer; /* Curseur pointer pour le bouton */
+        transition: background-color 0.3s; /* Transition pour l'effet hover */
+    }
+
+    .toggle-table-btn:hover, .toggle-tickets-btn:hover {
+        background-color: #0056b3; /* Couleur du bouton au survol */
+    }
+
+    /* Media Queries pour la responsivité */
+    @media (max-width: 768px) {
+        .cardBox .card {
+            flex: 1 1 100%; /* 1 carte par ligne pour les petits écrans */
+            margin: 3px;
+
+        }
+
+        img{
+            background-image: url({{ item.evenement.image.url }});
+        }
+        
+    }
+
+    @media (max-width: 480px) {
+        .cardBox .card {
+            flex: 1 1 100%; /* 1 carte par ligne pour les petits écrans */
+            margin: 3px;
+        }
+
+        .eventRow {
+            flex-direction: column; /* Les éléments s'empilent sur les petits écrans */
+            align-items: center; /* Centrer les éléments */
+        }
+        img{
+            margin-left: 60%;
+            width: 100%;
+        }
+    }
+</style>
+
+
+
+{% endblock %}

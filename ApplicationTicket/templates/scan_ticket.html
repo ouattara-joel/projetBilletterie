@@ -1,0 +1,175 @@
+{% extends "Dashbord.html" %}
+{% load static %}
+
+{% block content %}
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+
+<div class="scanner-container">
+    <h1>Scanner les tickets pour l'événement : {{ evenement.titre }}</h1>
+
+    <!-- Section pour le scan du QR code -->
+    <div id="qr-reader" style="width:400px;"></div>
+    <div id="qr-reader-results"></div>
+    <div id="ticket-info" style="display:none; margin-top: 20px;"></div>
+
+    <!-- Bouton pour ajouter des personnes pour scanner -->
+    <button id="add-scan-person" class="scan-btn">Ajouter une personne pour scanner</button>
+</div>
+
+<style>
+/* Votre style CSS ici (identique à celui que vous avez fourni) */
+.scanner-container {
+    margin-top: -2em;
+    text-align: center;
+    background-color: var(--white);
+    padding: 5vw;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 90%; /* Réduit la largeur sur petits écrans */
+}
+.scanner-container h1 {
+    font-size: 1.8rem;
+    color: var(--blue);
+    margin-bottom: 1vw;
+}
+#qr-reader {
+    border: 2px solid var(--blue);
+    margin-left: 30%;
+    border-radius: 10px;
+    padding: 2vw;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 400px;
+}
+#qr-reader-results {
+    margin-top: 2vw;
+    font-size: 1.2rem;
+    color: var(--black);
+}
+.scan-btn {
+    background-color: var(--blue);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin-top: 1vw;
+    transition: background 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+}
+.scan-btn:hover {
+    background-color: #fff;
+    color: var(--blue);
+    border: 2px solid var(--blue);
+}
+/* Media queries pour les plus petits écrans */
+@media (max-width: 768px) {
+    .scanner-container {
+        padding: 5vw 4vw;
+        margin-left: 10%;
+    }
+    .scanner-container h1 {
+        font-size: 1.5rem;
+        margin-left: 10%;
+
+    }
+    #qr-reader {
+        width: 90%;
+        margin-left: 19%;
+
+    }
+    #qr-reader-results {
+        font-size: 1rem;
+        margin-left: 10%;
+
+    }
+    .scan-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        max-width: 60%;
+        margin-left: 10%;
+
+    }
+    /* Media queries pour les plus petits écrans */
+@media (max-width: 668px) {
+    .scanner-container {
+        margin-top: 3em;
+        padding: 5vw 4vw;
+        margin-left: 7%;
+    }
+    .scanner-container h1 {
+        font-size: 1.5rem;
+        margin-left: 7%;
+
+    }
+    #qr-reader {
+        margin-top: 1em;
+        width: 80%;
+        margin-left: 9%;
+
+    }
+    #qr-reader-results {
+        font-size: 1rem;
+        margin-left: 7%;
+
+    }
+    .scan-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        max-width: 60%;
+        margin-left: 5%;
+
+    }
+}
+</style>
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+    console.log(`Code scanné = ${decodedText}`, decodedResult);
+    document.getElementById("qr-reader-results").innerText = `Code scanné : ${decodedText}`;
+
+    // Envoi d'une requête POST à la vue scan_ticket
+    fetch(`/scan_ticket/${evenement_id}/`, { // Remplacez evenement_id par l'ID de l'événement
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // Assurez-vous d'inclure le token CSRF
+        },
+        body: JSON.stringify({ decoded_text: decodedText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(data.message);
+            // Affichez un message de succès ou faites d'autres actions
+        } else {
+            console.error(data.message);
+            // Affichez un message d'erreur à l'utilisateur
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la requête :', error);
+    });
+}
+
+// Fonction pour obtenir le token CSRF
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Vérifie si ce cookie commence par le nom que nous recherchons
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+</script>
+{% endblock %}

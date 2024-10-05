@@ -1,0 +1,76 @@
+
+
+
+
+
+{% extends "base_accueil.html" %}
+{% load static %}
+
+{% block content %}
+<!-- ticket_detail.html -->
+
+<h1>Ticket pour {{ ticket.nom_beneficiaire }} {{ ticket.prenom_beneficiaire }}</h1>
+
+<p>Événement : {{ ticket.evenement.titre }}</p>
+<p>Date : {{ ticket.evenement.date }}</p>
+<p>Lieu : {{ ticket.evenement.lieu }}</p>
+
+<!-- Affiche l'image de l'événement -->
+<div class="ticket-container">
+    <img src="{{ ticket.evenement.image.url }}" alt="{{ ticket.evenement.titre }}" class="ticket-image">
+    
+    <h3 class="qr-title">Votre QR Code :</h3>
+    <img src="{{ ticket.qr_code.url }}" alt="QR Code" class="qr-code">
+
+    <a href="#" class="btn">Télécharger votre ticket</a>
+</div>
+
+<style>
+    .ticket-container {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 400px;
+        max-height: 600px;
+        text-align: center;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .ticket-image {
+        width: 15em;
+        height: 13em;
+        border-radius: 10px;
+        max-height: auto; /* Ajuste la hauteur selon tes besoins */
+        object-fit: cover;
+    }
+
+    .qr-code {
+        width: 200px; /* Ajuste la taille selon tes besoins */
+        height: 200px; /* Ajuste la taille selon tes besoins */
+        margin: 10px 0;
+    }
+
+    .qr-title {
+        margin: 10px 0;
+        font-weight: bold;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+
+{% endblock %}

@@ -1,0 +1,157 @@
+
+
+{% extends "base_accueil.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- ======================= CONNEXION ================== -->
+<div class="evenement">
+    <div class="event-form-container">
+        <h2>Connectez-vous a votre compte</h2>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <form action="connexion" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">E-mail :</label>
+                <input type="email" id="email" name="email" placeholder="exemple@excemple.com" required>
+            </div>
+    
+           
+            <div class="form-group">
+                <label for="password">Password :</label>
+                <input type="password" id="password" name="password" placeholder="password" required>
+            </div>
+    
+    
+            <div class="form-group button-container">
+                <a href="{% url 'creer_compte' %}" class="create-account-button">Créer un compte</a>
+                <button type="submit" class="submit-button">Connexion</button>
+
+            </div>
+            <a href="#">Mot de passe oublié</a>
+            
+        </form>
+    </div>
+</div>
+
+
+
+
+<style>
+    /* ////////////////////////EVENEMENT ////////////////////// */
+.event-form-container {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 600px;
+  margin-top: 6em;
+  margin-left: 30%;
+
+}
+
+.event-form-container h2 {
+  font-size: 2rem;
+  color: var(--blue);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--black2);
+  margin-bottom: 4px;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--black2);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 10px rgba(0, 0, 255, 0.2);
+}
+
+
+/* Container for the two buttons */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Ensure the container takes full width */
+}
+
+/* Style for the links acting as buttons */
+.submit-button, .create-account-button {
+  display: inline-block;
+  text-align: center;
+  width: 48%; /* Each button takes nearly half of the width */
+  padding: 15px;
+  font-size: 1.2rem;
+  color: var(--white);
+  text-decoration: none; /* Remove underline from links */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* Style for Connexion button */
+.submit-button {
+  background-color: var(--blue);
+}
+
+.submit-button:hover {
+  background-color: var(--black2);
+}
+
+/* Style for Create Account button */
+.create-account-button {
+  background-color: var(--black2); /* Define your desired green color */
+}
+
+.create-account-button:hover {
+  background-color: var(--blue); /* Hover effect for the create account button */
+}
+
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .event-form-container {
+    padding: 15px;
+  }
+
+  .form-group input {
+    font-size: 0.9rem;
+  }
+
+  .submit-button {
+    font-size: 1rem;
+  }
+}
+</style>
+
+
+
+{% endblock %}
+

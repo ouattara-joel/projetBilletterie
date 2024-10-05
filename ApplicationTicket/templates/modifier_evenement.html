@@ -1,0 +1,332 @@
+
+
+{% extends "Dashbord.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- ======================= EVENEMENTS ================== -->
+<div class="evenement">
+    <div class="event-form-container">
+        <h2>Modifier votre évènement {{evenement.nom}}</h2>
+        <form action="{% url 'modifier_evenement' evenement.id %}" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment modifier cet événement ?');">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="titre">Titre :</label>
+                <input type="text" id="titre" name="titre" value="{{ evenement.titre }}" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Date :</label>
+                <input type="date" id="date" name="date" value="{{ evenement.date|date:'Y-m-d' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="heure">Heure :</label>
+                <input type="time" id="heure" name="heure" value="{{ evenement.heure }}" required>
+            </div>
+            <div class="form-group">
+                <label for="lieu">Lieu :</label>
+                <input type="text" id="lieu" name="lieu" value="{{ evenement.lieu }}" required>
+            </div>
+            <div class="form-group">
+                <label for="places">Nombre de places :</label>
+                <input type="number" id="places" name="places" min="1" value="{{ evenement.nombre_places }}" required>
+            </div>
+            <div class="form-group">
+                <label for="montant">Montant :</label>
+                <input type="number" id="montant" name="montant" step="0.01" value="{{ evenement.montant }}" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Image :</label>
+                {% if evenement.image %}
+                    <img src="{{ evenement.image.url }}" alt="Image de l'événement" style="max-width: 200px; max-height: 200px;">
+                {% endif %}
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-modifier">Modifier l'événement</button>
+
+        </form>
+        
+    </div>
+</div>
+<div class="details" id="participants-content">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h2>Liste des événements</h2>
+            <a href="#" class="btn">Tout afficher</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Titre</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Lieu</th>
+                        <th>Places</th>
+                        <th>Montant</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if evenements %}
+                        {% for evenement in evenements %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ evenement.titre }}</td>
+                            <td>{{ evenement.date }}</td>
+                            <td>{{ evenement.heure }}</td>
+                            <td>{{ evenement.lieu }}</td>
+                            <td>{{ evenement.nombre_places }}</td>
+                            <td>{{ evenement.montant }}</td>
+                            <td>
+                                <a href="{% url 'modifier_evenement' evenement.id %}" class="btn btn-modifier">Modifier</a>
+                                <form action="{% url 'supprimer_evenement' evenement.id %}" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet événement ?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-supprimer">Supprimer</button>
+                                </form>
+                                
+                            </td>
+                            
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8">Aucun événement disponible</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* ////////////////////////EVENEMENT ////////////////////// */
+.event-form-container {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.event-form-container h2 {
+  font-size: 2rem;
+  color: var(--blue);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--black2);
+  margin-bottom: 4px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group input[type="number"],
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--black2);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input[type="file"] {
+  padding: 3px; /* Réduit le padding pour le champ de fichier */
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 10px rgba(0, 0, 255, 0.2);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--blue);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: var(--black2);
+}
+
+/* /////////////////les boutons supprimer et modifier /////////// */
+/* ////////////////////////EVENEMENT ////////////////////// */
+.recentOrders {
+    margin-bottom: 10px; /* Réduire l'espace sous la liste */
+}
+
+.table-responsive {
+    overflow-x: auto; /* Permet de faire défiler horizontalement */
+    margin-top: -11em; /* Réduire l'espace entre le titre et le tableau */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Largeur minimum pour le tableau */
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+th, td {
+    padding: 8px; /* Réduire la taille des cellules */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px; /* Ajuster la taille de la police */
+}
+
+th {
+    font-weight: bold;
+}
+
+tr {
+    height: 30px; /* Ajuster la hauteur des lignes */
+}
+
+.status {
+    padding: 4px 8px; /* Ajuster le padding du statut */
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px; /* Ajuster la taille de la police */
+}
+
+.delivered {
+    background-color: green;
+}
+
+.pending {
+    background-color: red;
+}
+
+/* Supprimer l'effet de survol */
+tr:hover {
+    background-color: transparent;
+}
+
+/* Styles pour les boutons */
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: var(--white);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-modifier {
+    background-color: var(--blue);
+    margin-right: 5px;
+    text-decoration: none;
+}
+
+.btn-supprimer {
+    background-color: red; /* Couleur pour le bouton supprimer */
+}
+
+.btn-modifier:hover {
+    background-color: white;
+    color: var(--blue);
+
+}
+
+.btn-supprimer:hover {
+    background-color: white;
+    color: red;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    th, td {
+        padding: 6px; /* Réduire encore plus le padding pour les écrans plus petits */
+        font-size: 12px; /* Ajuster la taille de la police */
+    }
+
+    tr {
+        height: auto; /* Permet aux lignes de s'ajuster automatiquement */
+        display: block; /* Comportement de bloc pour les cellules */
+    }
+
+    th, td {
+        display: flex; /* Utiliser flexbox pour la disposition */
+        justify-content: space-between; /* Espacement entre les éléments */
+    }
+
+    .hidden {
+        display: none; /* Masquer les colonnes non essentielles */
+    }
+
+    .table-responsive {
+        margin-top: 3em; /* Réduire l'espace entre le titre et le tableau */
+    }
+}
+
+
+</style>
+
+
+<script>
+    const MAX_EVENTS_TO_SHOW = 5;
+    let allEventsVisible = false; // État de l'affichage des événements
+
+    document.getElementById("toggle-events").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêcher le comportement par défaut du lien
+        
+        const rows = document.querySelectorAll(".styled-table tbody tr");
+        
+        // Basculer entre afficher tous les événements et afficher uniquement 5 événements
+        if (allEventsVisible) {
+            rows.forEach((row, index) => {
+                row.style.display = index < MAX_EVENTS_TO_SHOW ? "" : "none";
+            });
+            this.textContent = "Tout afficher"; // Mettre à jour le texte du bouton
+        } else {
+            rows.forEach(row => {
+                row.style.display = ""; // Afficher chaque ligne
+            });
+            this.textContent = "Réduire à 5 événements"; // Mettre à jour le texte du bouton
+        }
+
+        // Mettre à jour l'état
+        allEventsVisible = !allEventsVisible; // Inverser l'état
+    });
+
+    // Initialiser l'affichage aux 5 premiers événements au chargement de la page
+    document.addEventListener("DOMContentLoaded", function() {
+        const rows = document.querySelectorAll(".styled-table tbody tr");
+        rows.forEach((row, index) => {
+            if (index >= MAX_EVENTS_TO_SHOW) {
+                row.style.display = "none"; // Cacher les lignes au-delà des 5 premiers
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/accueil.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <title>Événements</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="{% static 'images/Evenement.png' %}" alt="Logo" />
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'accueil' %}">Accueil</a>
+                <a href="#">À Propos</a>
+                <a href="#">Contact</a>
+                <a href="{% url 'connexion' %}" class="active">Publier un évènement</a>
+            </div>
+        </div>
+    </nav>
+    
+    
+
+<style>
+    /* Barre de navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--gray);
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* S'assure que la barre reste au-dessus du contenu */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 50px;
+    width: 70px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: var(--black1);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease, font-weight 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: var(--hover-bg);
+    color: var(--hover-text);
+    font-weight: 700;
+}
+
+.nav-links .active {
+    background-color: var(--active-bg);
+    color: var(--active-text);
+}
+
+
+
+</style>
+    
+    {% block content %}
+
+        
+            
+    {% endblock %}
+
+
+   
+    <!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+      <!-- Section des liens -->
+      <div class="footer-section">
+        <h3>Liens utiles</h3>
+        <ul>
+          <li><a href="#">Accueil</a></li>
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Événements</a></li>
+        </ul>
+      </div>
+  
+      <!-- Section des réseaux sociaux -->
+      <div class="footer-section">
+        <h3>Suivez-nous</h3>
+        <ul class="social-links">
+          <li><a href="#"><img src="static/images/customer01.jpg" alt="Facebook"></a></li>
+          <li><a href="#"><img src="static/images/customer01.jpg" alt="Twitter"></a></li>
+          <li><a href="#"><img src="static/images/customer01.jpg" alt="Instagram"></a></li>
+          <li><a href="#"><img src="static/images/customer01.jpg" alt="LinkedIn"></a></li>
+        </ul>
+      </div>
+  
+      <!-- Section des informations de contact -->
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>Email : contact@exemple.com</p>
+        <p>Téléphone : +225 01 23 45 67 89</p>
+        <p>Adresse : 123 Rue des Événements, Abidjan</p>
+      </div>
+    </div>
+  
+    <!-- Copyright -->
+    <div class="footer-bottom">
+      <p>&copy; 2024 - Tous droits réservés.</p>
+    </div>
+  </footer>
+  
+</body>
+</html>

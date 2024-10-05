@@ -1,0 +1,188 @@
+{% extends "Dashbord.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- ======================= EVENEMENTS ================== -->
+<!-- Section Événements -->
+<div class="events">
+    <h1>Contrôlez les tickets de vos événements</h1>
+    <div class="events-grid">
+        {% for evenement in page_obj %}
+        <div class="event-item">
+            <img src="{{ evenement.image.url }}" alt="Logo de l'événement" />
+            <h2>{{ evenement.titre }}</h2>
+            <p><strong>Date :</strong> {{ evenement.date }}<br><strong>Lieu :</strong> {{ evenement.lieu }}</p>
+            <a href="{% url 'scan_ticket' evenement.id %}" class="event-btn">Scanner les tickets</a>
+        </div>
+        {% empty %}
+        <div class="card">
+            <div class="no-events">
+                <div class="message">Aucun événement disponible</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="pagination-link">&laquo; Première</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="pagination-link">Précédent</a>
+            {% endif %}
+
+            <span class="current-page">
+                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="pagination-link">Suivant</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">Dernière &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<style>
+/* Conteneur principal des événements */
+.events {
+    margin-top: 6em;
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.events h1 {
+    font-size: 2rem;
+    color: var(--blue);
+    margin-bottom: 30px;
+}
+
+/* Grille des événements */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Style des éléments d'événement */
+.event-item {
+    background-color: var(--lightGray);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 7px 25px rgba(56, 43, 114, 0.8);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.event-item img {
+    width: 13em;
+    max-width: 100%;
+    height: 14em;
+    max-height: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.event-item h2 {
+    font-size: 1.4rem;
+    color: var(--black2);
+    margin-bottom: 10px;
+}
+
+.event-item p {
+    font-size: 1rem;
+    color: var(--black3);
+    margin-bottom: 20px;
+}
+
+.event-item:hover {
+    background-color: var(--blue);
+    transform: scale(1.05);
+}
+
+.event-item:hover h2,
+.event-item:hover p {
+    color: var(--white);
+}
+
+/* Style pour le bouton Scanner */
+.event-btn {
+    background-color: var(--blue);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.event-btn:hover {
+    background-color: #fff;
+    color: var(--blue);
+    border: 1px solid var(--blue);
+}
+
+/* Pagination */
+.pagination {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pagination .step-links {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pagination .pagination-link {
+    padding: 8px 15px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.pagination .pagination-link:hover {
+    background-color: #0056b3;
+}
+
+.pagination .current-page {
+    padding: 8px 15px;
+    background-color: #e0e0e0;
+    color: black;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Style pour le message lorsqu'il n'y a pas d'événement */
+.no-events {
+    background-color: var(--lightGray);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.no-events .message {
+    font-size: 1.2rem;
+    color: var(--black3);
+}
+
+</style>
+
+{% endblock %}

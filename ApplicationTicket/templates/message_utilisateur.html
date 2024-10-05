@@ -1,0 +1,99 @@
+
+{% extends "Dashbord.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- ======================= Message ================== -->
+
+<div class="messages">
+    <h1>Recevez vos messages ici</h1>
+    <div class="message-container">
+        <!-- Les messages reçus apparaîtront ici -->
+        <div class="message received">
+            <p>Message reçu #1</p>
+        </div>
+        <div class="message received"></div>
+            <p>Message reçu #2</p>
+        </div>
+        <div class="message received"></div>
+        </div>
+        <div class="message sent">
+            <p>Message envoyé #1</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .messages {
+    background-color: var(--white); /* Couleur de fond du cadre */
+    border-radius: 20px; /* Bordures arrondies */
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); /* Ombre pour l'effet de carte */
+    width: 100%; /* Occupation de la largeur complète du conteneur */
+    max-width: 800px; /* Limite de la largeur */
+    margin: 0 auto; /* Centrage du cadre */
+    margin-top: 20px;
+}
+
+.messages h1 {
+    font-size: 1.8rem;
+    color: var(--blue);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.message-container {
+    max-height: 400px; /* Hauteur maximale du conteneur de messages */
+    overflow-y: auto; /* Ajout d'une barre de défilement si les messages dépassent la hauteur */
+    padding: 10px;
+    background-color: var(--lightGray); /* Fond pour les messages */
+    border-radius: 10px;
+}
+
+.message {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Ombre pour chaque message */
+    font-size: 1rem;
+}
+
+.message.received {
+    background-color: var(--lightBlue); /* Couleur des messages reçus */
+    text-align: left;
+    color: var(--black2);
+}
+
+.message.sent {
+    background-color: var(--blue); /* Couleur des messages envoyés */
+    text-align: right;
+    width: 700px;
+    margin-left: 200px;
+    color: var(--white);
+    text-align: center;
+}
+
+.message p {
+    margin: 0;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .messages {
+        padding: 15px;
+    }
+
+    .messages h1 {
+        font-size: 1.5rem;
+    }
+
+    .message p {
+        font-size: 0.9rem;
+    }
+}
+
+</style>
+
+{% endblock %}
